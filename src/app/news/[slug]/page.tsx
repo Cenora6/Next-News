@@ -1,5 +1,6 @@
 import { DUMMY_NEWS } from "@/lib/dummy-news";
 import styles from "./page.module.css";
+import { notFound } from "next/navigation";
 
 interface SingleNewsPageProps {
   params: {
@@ -11,7 +12,7 @@ export default function SingleNewsPage({ params }: SingleNewsPageProps) {
   const news = DUMMY_NEWS.find((news) => news.slug === params.slug);
 
   if (!news) {
-    return <p>News not found</p>;
+    notFound();
   }
 
   return (
