@@ -5,8 +5,12 @@
     border-radius: 4px;
 }
 
-.link:hover,
-.link.active {
+.link:hover {
+    background-color: #bcbcb7;
+    color: #181817;
+}
+
+.active {
     background-color: #bcbcb7;
     color: #181817;
 }

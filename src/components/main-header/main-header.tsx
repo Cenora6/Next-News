@@ -11,7 +11,10 @@ export const MainHeader: React.FC = () => {
       <nav>
         <ul className={styles.links}>
           <li>
-            <NavLink url="/news" text="News" />
+            <NavLink url="/news">News</NavLink>
+          </li>
+          <li>
+            <NavLink url="/archive">Archive</NavLink>
           </li>
         </ul>
       </nav>
