@@ -1,6 +1,7 @@
 import { DUMMY_NEWS } from "@/lib/dummy-news";
 import styles from "./page.module.css";
 import { notFound } from "next/navigation";
+import Link from "next/link";
 
 interface SingleNewsPageProps {
   params: {
@@ -18,7 +19,9 @@ export default function SingleNewsPage({ params }: SingleNewsPageProps) {
   return (
     <article className={styles["news-article"]}>
       <header>
-        <img src={`/images/news/${news.image}`} alt={news.title} />
+        <Link href={`/news/${news.slug}/image`}>
+          <img src={`/images/news/${news.image}`} alt={news.title} />
+        </Link>
         <h1>{news.title}</h1>
         <time dateTime={news.date}>{news.date}</time>
       </header>
