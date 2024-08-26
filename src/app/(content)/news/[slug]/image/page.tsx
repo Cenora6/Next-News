@@ -1,6 +1,6 @@
 import { DUMMY_NEWS } from "@/lib/dummy-news";
 import { notFound } from "next/navigation";
-import styles from "src/app/(content)/news/[slug]/image/page.module.css";
+import styles from "./page.module.css";
 
 interface ImagePageProps {
   params: {

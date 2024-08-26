@@ -2,7 +2,7 @@
 
 import { DUMMY_NEWS } from "@/lib/dummy-news";
 import { notFound, useRouter } from "next/navigation";
-import styles from "src/app/(content)/news/[slug]/@modal/(.)image/page.module.css";
+import styles from "./page.module.css";
 
 interface InterceptedImagePageProps {
   params: {
