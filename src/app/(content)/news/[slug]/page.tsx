@@ -1,5 +1,5 @@
 import { DUMMY_NEWS } from "@/lib/dummy-news";
-import styles from "./page.module.css";
+import styles from "src/app/(content)/news/[slug]/page.module.css";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 
