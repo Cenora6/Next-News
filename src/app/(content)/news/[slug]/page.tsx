@@ -1,7 +1,7 @@
-import { DUMMY_NEWS } from "@/lib/dummy-news";
 import styles from "./page.module.css";
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import { getNewsItem } from "@/lib/db";
 
 interface SingleNewsPageProps {
   params: {
@@ -9,8 +9,8 @@ interface SingleNewsPageProps {
   };
 }
 
-export default function SingleNewsPage({ params }: SingleNewsPageProps) {
-  const news = DUMMY_NEWS.find((news) => news.slug === params.slug);
+export default async function SingleNewsPage({ params }: SingleNewsPageProps) {
+  const news = await getNewsItem(params.slug);
 
   if (!news) {
     notFound();

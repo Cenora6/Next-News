@@ -4,8 +4,9 @@ import {
   getAvailableNewsYears,
   getNewsForYear,
   getNewsForYearAndMonth,
-} from "@/utils/news";
+} from "@/lib/db";
 import Link from "next/link";
+import { Suspense } from "react";
 
 interface FilteredNewsPageProps {
   params: {
@@ -13,21 +14,32 @@ interface FilteredNewsPageProps {
   };
 }
 
-export default function FilteredNewsPage({ params }: FilteredNewsPageProps) {
+export default async function FilteredNewsPage({
+  params,
+}: FilteredNewsPageProps) {
   const selectedYear = params.filter?.[0];
   const selectedMonth = params.filter?.[1];
 
+  return (
+    <Suspense fallback={<p>Loading news...</p>}>
+      <FilterHeader year={selectedYear} month={selectedMonth} />
+      <FilteredNews year={selectedYear} month={selectedMonth} />
+    </Suspense>
+  );
+}
+
+interface FilteredNewsProps {
+  year?: string;
+  month?: string;
+}
+
+async function FilteredNews({ year, month }: FilteredNewsProps) {
   let news;
-  let links = getAvailableNewsYears();
 
-  if (selectedYear && !selectedMonth) {
-    news = getNewsForYear(selectedYear);
-    links = getAvailableNewsMonths(selectedYear);
-  }
-
-  if (selectedYear && selectedMonth) {
-    news = getNewsForYearAndMonth(selectedYear, selectedMonth);
-    links = [];
+  if (year && !month) {
+    news = await getNewsForYear(year);
+  } else if (year && month) {
+    news = await getNewsForYearAndMonth(year, month);
   }
 
   let newsContent = <p>No news found for the selected period.</p>;
@@ -36,34 +48,47 @@ export default function FilteredNewsPage({ params }: FilteredNewsPageProps) {
     newsContent = <NewsList news={news} />;
   }
 
+  return newsContent;
+}
+
+interface FilterHeaderProps {
+  year?: string;
+  month?: string;
+}
+
+async function FilterHeader({ year, month }: FilterHeaderProps) {
+  const availableYears = await getAvailableNewsYears();
+  let links = await getAvailableNewsYears();
+
   if (
-    (selectedYear && !getAvailableNewsYears().includes(+selectedYear)) ||
-    (selectedYear &&
-      selectedMonth &&
-      !getAvailableNewsMonths(selectedYear).includes(+selectedMonth))
+    (year && !availableYears.includes(year)) ||
+    (year && month && !getAvailableNewsMonths(year).includes(month))
   ) {
     throw new Error("Invalid filter.");
   }
 
+  if (year && !month) {
+    links = getAvailableNewsMonths(year);
+  }
+
+  if (year && month) {
+    links = [];
+  }
+
   return (
-    <>
-      <header id="archive-header">
-        <nav>
-          <ul>
-            {links.map((link) => {
-              const href = selectedYear
-                ? `/archive/${selectedYear}/${link}`
-                : `/archive/${link}`;
-              return (
-                <li key={link}>
-                  <Link href={href}>{link}</Link>
-                </li>
-              );
-            })}
-          </ul>
-        </nav>
-      </header>
-      {newsContent}
-    </>
+    <header id="archive-header">
+      <nav>
+        <ul>
+          {links.map((link) => {
+            const href = year ? `/archive/${year}/${link}` : `/archive/${link}`;
+            return (
+              <li key={link}>
+                <Link href={href}>{link}</Link>
+              </li>
+            );
+          })}
+        </ul>
+      </nav>
+    </header>
   );
 }
