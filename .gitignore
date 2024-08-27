@@ -37,3 +37,6 @@ next-env.d.ts
 
 #idea
 .idea
+
+#backend
+src/backend/node_modules/
