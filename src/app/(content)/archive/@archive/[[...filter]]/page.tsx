@@ -7,6 +7,7 @@ import {
 } from "@/lib/db";
 import Link from "next/link";
 import { Suspense } from "react";
+import styles from "./page.module.css";
 
 interface FilteredNewsPageProps {
   params: {
@@ -76,13 +77,13 @@ async function FilterHeader({ year, month }: FilterHeaderProps) {
   }
 
   return (
-    <header id="archive-header">
+    <header>
       <nav>
-        <ul>
+        <ul className={styles["archive-header-list"]}>
           {links.map((link) => {
             const href = year ? `/archive/${year}/${link}` : `/archive/${link}`;
             return (
-              <li key={link}>
+              <li key={link} className={styles["archive-header-list-element"]}>
                 <Link href={href}>{link}</Link>
               </li>
             );
